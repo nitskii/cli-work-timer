@@ -14,10 +14,28 @@ export const validateInputTime = ({ args }) => {
   }
 };
 
-export const getCurrentTime = () => {
+export const createTimeCardIfNotExists = () => {};
+
+const getCurrentTime = () => {
   const now = new Date();
   const hours = now.getHours();
   const minutes = now.getMinutes();
 
   return `${hours}:${minutes}`;
+};
+
+export const updateStartTime = time => {};
+
+export const updateEndTime = time => {};
+
+export const displayCheckedInMessage = ({ args }) => {
+  const [time] = args;
+
+  console.log(`Checked in at ${time ?? getCurrentTime()}`);
+};
+
+export const displayCheckedOutMessage = ({ args }) => {
+  const [time] = args;
+
+  console.log(`Checked out at ${time ?? getCurrentTime()}`);
 };

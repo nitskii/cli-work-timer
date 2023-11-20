@@ -1,6 +1,10 @@
 import { Command } from 'commander';
 import {
-  getCurrentTime,
+  createTimeCardIfNotExists,
+  displayCheckedInMessage,
+  displayCheckedOutMessage,
+  updateEndTime,
+  updateStartTime,
   validateInputTime
 } from './lib.js';
 
@@ -11,21 +15,17 @@ program
   .argument('[time]')
   .description('')
   .hook('preAction', validateInputTime)
-  .action(time => {
-    console.log(
-      `Checked in at ${time ?? getCurrentTime()}`
-    );
-  });
+  .hook('preAction', createTimeCardIfNotExists)
+  .action(updateStartTime)
+  .hook('postAction', displayCheckedInMessage);
 
 program
   .command('check-out')
   .argument('[time]')
   .description('')
   .hook('preAction', validateInputTime)
-  .action(time => {
-    console.log(
-      `Checked out at ${time ?? getCurrentTime()}`
-    );
-  });
+  .hook('preAction', createTimeCardIfNotExists)
+  .action(updateEndTime)
+  .hook('postAction', displayCheckedOutMessage);
 
 program.parse(process.argv);
