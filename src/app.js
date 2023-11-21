@@ -3,6 +3,7 @@ import {
   createTimeCardIfNotExists,
   displayCheckedInMessage,
   displayCheckedOutMessage,
+  displayCurrentTimecard,
   timeArgument,
   updateEndTime,
   updateStartTime,
@@ -28,5 +29,10 @@ program
   .hook('preAction', createTimeCardIfNotExists)
   .action(updateEndTime)
   .hook('postAction', displayCheckedOutMessage);
+
+program
+  .command('today')
+  .description('show current timecard info')
+  .action(displayCurrentTimecard);
 
 program.parse(process.argv);

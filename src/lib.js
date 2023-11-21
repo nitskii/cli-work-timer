@@ -55,6 +55,12 @@ export const updateStartTime = async time => {
   await saveData();
 };
 
+export const displayCheckedInMessage = ({ processedArgs }) => {
+  const [time] = processedArgs;
+
+  console.log(`Checked in at ${time}`);
+};
+
 export const updateEndTime = async time => {
   const today = new Date().toLocaleDateString('uk-UA');
   const currentRecord = timecards[today]
@@ -67,14 +73,30 @@ export const updateEndTime = async time => {
   await saveData();
 };
 
-export const displayCheckedInMessage = ({ processedArgs }) => {
-  const [time] = processedArgs;
-
-  console.log(`Checked in at ${time}`);
-};
-
 export const displayCheckedOutMessage = ({ processedArgs }) => {
   const [time] = processedArgs;
 
   console.log(`Checked out at ${time}`);
+};
+
+export const displayCurrentTimecard = () => {
+  const today = new Date().toLocaleDateString('uk-UA');
+  const timecard = timecards[today];
+  
+  console.log(`${today}:`);
+
+  if (!timecard) {
+    console.log("No records today yet");
+
+    return;
+  }
+
+  timecard.forEach(
+    (r, i) => console.log(
+      `${i + 1}. ` +
+      `${r.start || 'N/A'}` +
+      ' - ' +
+      `${r.end || 'N/A'}`
+    )
+  );
 };
