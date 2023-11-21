@@ -3,6 +3,7 @@ import {
   createTimeCardIfNotExists,
   displayCheckedInMessage,
   displayCheckedOutMessage,
+  timeArgument,
   updateEndTime,
   updateStartTime,
   validateInputTime
@@ -12,8 +13,8 @@ const program = new Command();
 
 program
   .command('check-in')
-  .argument('[time]')
-  .description('')
+  .addArgument(timeArgument)
+  .description('update start time of the current timecard record')
   .hook('preAction', validateInputTime)
   .hook('preAction', createTimeCardIfNotExists)
   .action(updateStartTime)
@@ -21,8 +22,8 @@ program
 
 program
   .command('check-out')
-  .argument('[time]')
-  .description('')
+  .addArgument(timeArgument)
+  .description('update end time of the current timecard record')
   .hook('preAction', validateInputTime)
   .hook('preAction', createTimeCardIfNotExists)
   .action(updateEndTime)
