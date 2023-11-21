@@ -1,28 +1,13 @@
 import { Argument } from 'commander';
-import { existsSync, readFileSync } from 'fs';
-import { writeFile } from 'fs/promises';
 import moment from 'moment';
-
-const DATA_FILE_NAME = 'timecards.json';
-
-const readData = () => {
-  return JSON.parse(readFileSync(DATA_FILE_NAME));
-};
-
-const saveData = async () => {
-  await writeFile(DATA_FILE_NAME, JSON.stringify(timecards));
-};
-
-const timecards = existsSync(DATA_FILE_NAME)
-  ? readData()
-  : {};
+import { saveData, data as timecards } from './data.js';
 
 const getCurrentTime = () => {
   const now = new Date();
   const hours = now.getHours();
   const minutes = now.getMinutes();
 
-  return `${hours}:${minutes}`;
+  return `${hours}:${minutes > 9 ? minutes : `0${minutes}`}`;
 };
 
 export const timeArgument = new Argument(
