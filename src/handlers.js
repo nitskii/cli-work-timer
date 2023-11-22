@@ -1,5 +1,10 @@
 import { saveData, data as timecards } from './data.js';
-import { getTimeRangeDuration, isValidTime, today } from './time.js';
+import {
+  isValidTime,
+  minutesToDuration,
+  timeRangeToMinutes,
+  today
+} from './time.js';
 
 export const validateInputTime = ({ processedArgs }) => {
   const [ time ] = processedArgs;
@@ -20,9 +25,20 @@ export const updateStartTime = async time => {
   const currentRecord = timecards[today]
     .find(r => r.start === null || r.end === null);
 
-  currentRecord
-    ? currentRecord.start = time
-    : timecards[today].push({ start: time, end: null });
+  if (currentRecord) {
+    currentRecord.start = time;
+
+    const isRecordComplete = currentRecord.start && currentRecord.end;
+
+    if (isRecordComplete) {
+      currentRecord.minutes = timeRangeToMinutes(
+        currentRecord.start,
+        currentRecord.end
+      );
+    }
+  } else {
+    timecards[today].push({ start: time, end: null });
+  }
 
   await saveData();
 };
@@ -37,11 +53,22 @@ export const updateEndTime = async time => {
   const currentRecord = timecards[today]
     .find(r => r.start === null || r.end === null);
 
-  currentRecord
-    ? currentRecord.end = time
-    : timecards[today].push({ start: null, end: time });
+    if (currentRecord) {
+      currentRecord.end = time;
   
-  await saveData();
+      const isRecordComplete = currentRecord.start && currentRecord.end;
+  
+      if (isRecordComplete) {
+        currentRecord.minutes = timeRangeToMinutes(
+          currentRecord.start,
+          currentRecord.end
+        );
+      }
+    } else {
+      timecards[today].push({ start: null, end: time });
+    }
+  
+    await saveData();
 };
 
 export const displayCheckedOutMessage = ({ processedArgs }) => {
@@ -59,8 +86,8 @@ const displayTimecardRecord = (record, index) => {
     `${record.end && record.end.length == 4 ? ' ' : ''}` +
     `${record.end || '  N/A'}` + 
     (
-      record.start && record.end
-        ? `, ${getTimeRangeDuration(record.start, record.end)}`
+      record.minutes
+        ? `, ${minutesToDuration(record.minutes)}`
         : ''
     )
   );

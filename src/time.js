@@ -12,16 +12,22 @@ export const isValidTime = time => moment(time, 'H:mm', true).isValid();
 
 export const today = new Date().toLocaleDateString('uk-UA');
 
-export const getTimeRangeDuration = (start, end) => {
-  const [ startHours, startMinutes ]= start.split(':');
-  const startSeconds = startHours * 3600 + startMinutes * 60;
+export const minutesToDuration = (minutes) => {
+  const hours = Math.floor(minutes / 60);
+  minutes = minutes % 60;
 
-  const [ endHours, endMinutes ]= end.split(':');
-  const endSeconds = endHours * 3600 + endMinutes * 60;
+  return (
+    `${hours ? `${hours}h ` : ""}` +
+    `${minutes ? `${minutes}m` : ""}`
+  );
+};
 
-  const duration = Math.abs(endSeconds - startSeconds);
-  const hours = Math.floor(duration / 3600);
-  const minutes = duration % 3600 / 60;
+export const timeRangeToMinutes = (start, end) => {
+  let [ startHours, startMinutes ]= start.split(':').map(v => +v);
+  startMinutes += startHours * 60;
 
-  return `${hours ? `${hours}h ` : ""}${minutes}m`;
+  let [ endHours, endMinutes ]= end.split(':').map(v => +v);
+  endMinutes += endHours * 60;
+
+  return Math.abs(endMinutes - startMinutes);
 };
