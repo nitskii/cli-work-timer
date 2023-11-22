@@ -1,14 +1,14 @@
 import { Command } from 'commander';
+import { timeArgument } from './arguments.js';
 import {
   createTimeCardIfNotExists,
   displayCheckedInMessage,
   displayCheckedOutMessage,
-  displayCurrentTimecard,
-  timeArgument,
+  displayTimecard,
   updateEndTime,
   updateStartTime,
   validateInputTime
-} from './lib.js';
+} from './handlers.js';
 
 const program = new Command();
 
@@ -33,6 +33,6 @@ program
 program
   .command('today')
   .description('show current timecard info')
-  .action(displayCurrentTimecard);
+  .action(() => displayTimecard());
 
 program.parse(process.argv);
