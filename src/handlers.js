@@ -52,7 +52,7 @@ export const updateStartTime = async time => {
   await saveData();
 };
 
-export const displayCheckedInMessage = ({ processedArgs }) => {
+export const showCheckedInMessage = ({ processedArgs }) => {
   const [ time ] = processedArgs;
 
   console.log(`Checked in at ${time}`);
@@ -80,13 +80,13 @@ export const updateEndTime = async time => {
     await saveData();
 };''
 
-export const displayCheckedOutMessage = ({ processedArgs }) => {
+export const showCheckedOutMessage = ({ processedArgs }) => {
   const [ time ] = processedArgs;
 
   console.log(`Checked out at ${time}`);
 };
 
-const displayTimecardRecord = (record, index) => {
+const showTimecardRecord = (record, index) => {
   console.log(
     `${index + 1}. ` +
     `${record.start && record.start.length == 4 ? ' ' : ''}` +
@@ -102,7 +102,7 @@ const displayTimecardRecord = (record, index) => {
   );
 };
 
-export const displayTimecard = (date = currentDate) => {
+export const showTimecard = (date = currentDate) => {
   const records = timecards[date];
   
   console.log(`${date}:`);
@@ -113,13 +113,22 @@ export const displayTimecard = (date = currentDate) => {
     return;
   }
 
-  records.forEach(displayTimecardRecord);
+  records.forEach(showTimecardRecord);
 };
 
-export const displayCurrentWeekTimecards = () => {
+export const showCurrentWeekTimecards = () => {
   for (let [date, records] of Object.entries(timecards)) {
     if (records.some(r => r.week === currentWeek && r.year === currentYear)) {
-      displayTimecard(date);
+      showTimecard(date);
+      console.log();
+    }
+  }
+};
+
+export const showCurrentMonthTimecards = () => {
+  for (let [date, records] of Object.entries(timecards)) {
+    if (records.some(r => r.month === currentMonth && r.year === currentYear)) {
+      showTimecard(date);
       console.log();
     }
   }

@@ -2,10 +2,11 @@ import { Command } from 'commander';
 import { timeArgument } from './arguments.js';
 import {
   createTimeCardIfNotExists,
-  displayCheckedInMessage,
-  displayCheckedOutMessage,
-  displayCurrentWeekTimecards,
-  displayTimecard,
+  showCheckedInMessage,
+  showCheckedOutMessage,
+  showCurrentMonthTimecards,
+  showCurrentWeekTimecards,
+  showTimecard,
   updateEndTime,
   updateStartTime,
   validateInputTime
@@ -20,7 +21,7 @@ program
   .hook('preAction', validateInputTime)
   .hook('preAction', createTimeCardIfNotExists)
   .action(updateStartTime)
-  .hook('postAction', displayCheckedInMessage);
+  .hook('postAction', showCheckedInMessage);
 
 program
   .command('check-out')
@@ -29,16 +30,21 @@ program
   .hook('preAction', validateInputTime)
   .hook('preAction', createTimeCardIfNotExists)
   .action(updateEndTime)
-  .hook('postAction', displayCheckedOutMessage);
+  .hook('postAction', showCheckedOutMessage);
 
 program
   .command('today')
   .description('show current timecard info')
-  .action(() => displayTimecard());
+  .action(() => showTimecard());
 
 program
   .command('week')
   .description('show current week timecards info')
-  .action(displayCurrentWeekTimecards)
+  .action(showCurrentWeekTimecards)
+
+program
+  .command('month')
+  .description('show current month timecards info')
+  .action(showCurrentMonthTimecards)
 
 program.parse(process.argv);
