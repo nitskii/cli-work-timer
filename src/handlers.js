@@ -1,9 +1,12 @@
 import { saveData, data as timecards } from './data.js';
 import {
+  currentDate,
+  currentMonth,
+  currentWeek,
+  currentYear,
   isValidTime,
   minutesToDuration,
-  timeRangeToMinutes,
-  today
+  timeRangeToMinutes
 } from './time.js';
 
 export const validateInputTime = ({ processedArgs }) => {
@@ -16,13 +19,19 @@ export const validateInputTime = ({ processedArgs }) => {
 };
 
 export const createTimeCardIfNotExists = async () => {
-  if (!Object.keys(timecards).includes(today)) {
-    timecards[today] = [{ start: null, end: null }];
+  if (!Object.keys(timecards).includes(currentDate)) {
+    timecards[currentDate] = [{
+      start: null,
+      end: null,
+      week: currentWeek,
+      month: currentMonth,
+      year: currentYear
+    }];
   }
 };
 
 export const updateStartTime = async time => {
-  const currentRecord = timecards[today]
+  const currentRecord = timecards[currentDate]
     .find(r => r.start === null || r.end === null);
 
   if (currentRecord) {
@@ -37,7 +46,7 @@ export const updateStartTime = async time => {
       );
     }
   } else {
-    timecards[today].push({ start: time, end: null });
+    timecards[currentDate].push({ start: time, end: null });
   }
 
   await saveData();
@@ -50,7 +59,7 @@ export const displayCheckedInMessage = ({ processedArgs }) => {
 };
 
 export const updateEndTime = async time => {
-  const currentRecord = timecards[today]
+  const currentRecord = timecards[currentDate]
     .find(r => r.start === null || r.end === null);
 
     if (currentRecord) {
@@ -65,11 +74,11 @@ export const updateEndTime = async time => {
         );
       }
     } else {
-      timecards[today].push({ start: null, end: time });
+      timecards[currentDate].push({ start: null, end: time });
     }
   
     await saveData();
-};
+};''
 
 export const displayCheckedOutMessage = ({ processedArgs }) => {
   const [ time ] = processedArgs;
@@ -93,16 +102,25 @@ const displayTimecardRecord = (record, index) => {
   );
 };
 
-export const displayTimecard = (date = today) => {
+export const displayTimecard = (date = currentDate) => {
   const records = timecards[date];
   
   console.log(`${date}:`);
 
   if (!records) {
-    console.log('No records yet');
+    console.log('No records');
 
     return;
   }
 
   records.forEach(displayTimecardRecord);
+};
+
+export const displayCurrentWeekTimecards = () => {
+  for (let [date, records] of Object.entries(timecards)) {
+    if (records.some(r => r.week === currentWeek && r.year === currentYear)) {
+      displayTimecard(date);
+      console.log();
+    }
+  }
 };

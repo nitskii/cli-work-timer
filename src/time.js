@@ -10,7 +10,11 @@ export const getCurrentTime = () => {
 
 export const isValidTime = time => moment(time, 'H:mm', true).isValid();
 
-export const today = new Date().toLocaleDateString('uk-UA');
+const today = moment();
+export const currentDate = today.format('DD.MM.YYYY');
+export const currentWeek = today.week();
+export const currentMonth = today.format('MMMM');
+export const currentYear = today.year();
 
 export const minutesToDuration = (minutes) => {
   const hours = Math.floor(minutes / 60);

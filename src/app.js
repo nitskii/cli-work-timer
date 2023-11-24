@@ -4,6 +4,7 @@ import {
   createTimeCardIfNotExists,
   displayCheckedInMessage,
   displayCheckedOutMessage,
+  displayCurrentWeekTimecards,
   displayTimecard,
   updateEndTime,
   updateStartTime,
@@ -34,5 +35,10 @@ program
   .command('today')
   .description('show current timecard info')
   .action(() => displayTimecard());
+
+program
+  .command('week')
+  .description('show current week timecards info')
+  .action(displayCurrentWeekTimecards)
 
 program.parse(process.argv);
