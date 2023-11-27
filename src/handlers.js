@@ -1,9 +1,9 @@
 import { saveData, data as timecards } from './data.js';
 import {
-  currentDate,
-  currentMonth,
-  currentWeek,
-  currentYear,
+  CURRENT_DATE,
+  CURRENT_MONTH,
+  CURRENT_WEEK,
+  CURRENT_YEAR,
   isValidTime,
   minutesToDuration,
   timeRangeToMinutes
@@ -19,19 +19,19 @@ export const validateInputTime = ({ processedArgs }) => {
 };
 
 export const createTimeCardIfNotExists = async () => {
-  if (!Object.keys(timecards).includes(currentDate)) {
-    timecards[currentDate] = [{
+  if (!Object.keys(timecards).includes(CURRENT_DATE)) {
+    timecards[CURRENT_DATE] = [{
       start: null,
       end: null,
-      week: currentWeek,
-      month: currentMonth,
-      year: currentYear
+      week: CURRENT_WEEK,
+      month: CURRENT_MONTH,
+      year: CURRENT_YEAR
     }];
   }
 };
 
 export const updateStartTime = async time => {
-  const currentRecord = timecards[currentDate]
+  const currentRecord = timecards[CURRENT_DATE]
     .find(r => r.start === null || r.end === null);
 
   if (currentRecord) {
@@ -46,7 +46,13 @@ export const updateStartTime = async time => {
       );
     }
   } else {
-    timecards[currentDate].push({ start: time, end: null });
+    timecards[CURRENT_DATE].push({
+      start: time,
+      end: null,
+      week: CURRENT_WEEK,
+      month: CURRENT_MONTH,
+      year: CURRENT_YEAR
+    });
   }
 
   await saveData();
@@ -59,7 +65,7 @@ export const showCheckedInMessage = ({ processedArgs }) => {
 };
 
 export const updateEndTime = async time => {
-  const currentRecord = timecards[currentDate]
+  const currentRecord = timecards[CURRENT_DATE]
     .find(r => r.start === null || r.end === null);
 
     if (currentRecord) {
@@ -74,11 +80,17 @@ export const updateEndTime = async time => {
         );
       }
     } else {
-      timecards[currentDate].push({ start: null, end: time });
+      timecards[CURRENT_DATE].push({
+        start: null,
+        end: time,
+        week: CURRENT_WEEK,
+        month: CURRENT_MONTH,
+        year: CURRENT_YEAR
+      });
     }
   
     await saveData();
-};''
+};
 
 export const showCheckedOutMessage = ({ processedArgs }) => {
   const [ time ] = processedArgs;
@@ -102,7 +114,7 @@ const showTimecardRecord = (record, index) => {
   );
 };
 
-export const showTimecard = (date = currentDate) => {
+export const showTimecard = (date = CURRENT_DATE) => {
   const records = timecards[date];
   
   console.log(`${date}:`);
@@ -118,7 +130,7 @@ export const showTimecard = (date = currentDate) => {
 
 export const showCurrentWeekTimecards = () => {
   for (let [date, records] of Object.entries(timecards)) {
-    if (records.some(r => r.week === currentWeek && r.year === currentYear)) {
+    if (records.some(r => r.week === CURRENT_WEEK && r.year === CURRENT_YEAR)) {
       showTimecard(date);
       console.log();
     }
@@ -127,7 +139,7 @@ export const showCurrentWeekTimecards = () => {
 
 export const showCurrentMonthTimecards = () => {
   for (let [date, records] of Object.entries(timecards)) {
-    if (records.some(r => r.month === currentMonth && r.year === currentYear)) {
+    if (records.some(r => r.month === CURRENT_MONTH && r.year === CURRENT_YEAR)) {
       showTimecard(date);
       console.log();
     }

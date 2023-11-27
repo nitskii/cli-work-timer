@@ -10,18 +10,19 @@ export const getCurrentTime = () => {
 
 export const isValidTime = time => moment(time, 'H:mm', true).isValid();
 
-const today = moment();
-export const currentDate = today.format('DD.MM.YYYY');
-export const currentWeek = today.week();
-export const currentMonth = today.format('MMMM');
-export const currentYear = today.year();
+const TODAY = moment();
+export const CURRENT_DATE = TODAY.format('DD.MM.YYYY');
+export const CURRENT_WEEK = TODAY.week();
+export const CURRENT_MONTH = TODAY.format('MMMM');
+export const CURRENT_YEAR = TODAY.year();
 
 export const minutesToDuration = (minutes) => {
   const hours = Math.floor(minutes / 60);
   minutes = minutes % 60;
 
   return (
-    `${hours ? `${hours}h ` : ""}` +
+    `${hours ? `${hours}h` : ""}` +
+    `${hours && minutes ? " " : ""}` +
     `${minutes ? `${minutes}m` : ""}`
   );
 };
