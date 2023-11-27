@@ -6,7 +6,9 @@ import {
   CURRENT_YEAR,
   isValidTime,
   minutesToDuration,
-  timeRangeToMinutes
+  timeRangeToMinutes,
+  timeRangesComparator,
+  timeStringToMinutes
 } from './time.js';
 
 export const validateInputTime = ({ processedArgs }) => {
@@ -54,7 +56,8 @@ export const updateStartTime = async time => {
       year: CURRENT_YEAR
     });
   }
-
+  
+  timecards[CURRENT_DATE].sort(timeRangesComparator);
   await saveData();
 };
 
@@ -88,7 +91,8 @@ export const updateEndTime = async time => {
         year: CURRENT_YEAR
       });
     }
-  
+    
+    timecards[CURRENT_DATE].sort(timeRangesComparator);
     await saveData();
 };
 
