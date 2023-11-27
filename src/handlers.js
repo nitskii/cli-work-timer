@@ -7,8 +7,7 @@ import {
   isValidTime,
   minutesToDuration,
   timeRangeToMinutes,
-  timeRangesComparator,
-  timeStringToMinutes
+  timeRangesComparator
 } from './time.js';
 
 export const validateInputTime = ({ processedArgs }) => {
@@ -130,6 +129,13 @@ export const showTimecard = (date = CURRENT_DATE) => {
   }
 
   records.forEach(showTimecardRecord);
+
+  if (records.some(r => r.start && r.end)) {
+    const completedRecords = records.filter(r => r.start && r.end);
+    const totalMinutes = completedRecords.reduce((acc, r) => acc += r.minutes, 0);
+    
+    console.log(`Total: ${minutesToDuration(totalMinutes)}`)
+  }
 };
 
 export const showCurrentWeekTimecards = () => {
