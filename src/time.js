@@ -50,23 +50,36 @@ export const timeRangeToMinutes = (start, end) => {
 };
 
 export const timeRangesComparator = (left, right) => {
-  if (left.start && right.start) {
+  if (left.start && left.end && right.start && right.end) {
     const leftStartMinutes = timeStringToMinutes(left.start);
-    const rightStartMinutes = timeStringToMinutes(right.start)
+    const leftEndMinutes = timeStringToMinutes(left.end);
+    const rightStartMinutes = timeStringToMinutes(right.start);
+    const rightEndMinutes = timeStringToMinutes(right.end);
+
+    return leftStartMinutes > rightStartMinutes
+      || leftEndMinutes > rightEndMinutes
+        ? 1
+        : leftStartMinutes === rightStartMinutes
+          && leftEndMinutes === rightEndMinutes
+            ? 0
+            : -1;
+  } else if (!left.end || !right.end) {
+    const leftStartMinutes = timeStringToMinutes(left.start);
+    const rightStartMinutes = timeStringToMinutes(right.start);
 
     return leftStartMinutes > rightStartMinutes
       ? 1
       : leftStartMinutes === rightStartMinutes
         ? 0
         : -1;
+  } else if (!left.start || !right.start) {
+    const leftEndMinutes = timeStringToMinutes(left.end);
+    const rightEndMinutes = timeStringToMinutes(right.end);
+
+    return leftEndMinutes > rightEndMinutes
+      ? 1
+      : leftEndMinutes === rightEndMinutes
+        ? 0
+        : -1;
   }
-
-  const leftEndMinutes = timeStringToMinutes(left.end);
-  const rightEndMinutes = timeStringToMinutes(right.end);
-
-  return leftEndMinutes > rightEndMinutes
-    ? 1
-    : leftEndMinutes === rightEndMinutes
-      ? 0
-      : -1;
 };
