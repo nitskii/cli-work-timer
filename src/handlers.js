@@ -7,7 +7,8 @@ import {
   isValidTime,
   minutesToDuration,
   timeRangeToMinutes,
-  timeRangesComparator
+  timeRangesComparator,
+  timeStringToMinutes
 } from './time.js';
 
 export const validateInputTime = ({ processedArgs }) => {
@@ -41,6 +42,15 @@ export const updateStartTime = async time => {
     const isRecordComplete = currentRecord.start && currentRecord.end;
 
     if (isRecordComplete) {
+      const startMinutes = timeStringToMinutes(currentRecord.start);
+      const endMinutes = timeStringToMinutes(currentRecord.end);
+
+      if (endMinutes <= startMinutes) {
+        console.log('Invalid time range');
+
+        process.exis(0);
+      }
+
       currentRecord.minutes = timeRangeToMinutes(
         currentRecord.start,
         currentRecord.end
@@ -76,6 +86,15 @@ export const updateEndTime = async time => {
       const isRecordComplete = currentRecord.start && currentRecord.end;
   
       if (isRecordComplete) {
+        const startMinutes = timeStringToMinutes(currentRecord.start);
+        const endMinutes = timeStringToMinutes(currentRecord.end);
+
+        if (endMinutes <= startMinutes) {
+          console.log('Invalid time range');
+
+          process.exit(0);
+        }
+
         currentRecord.minutes = timeRangeToMinutes(
           currentRecord.start,
           currentRecord.end
@@ -133,7 +152,7 @@ export const showTimecard = (date = CURRENT_DATE) => {
   if (records.some(r => r.start && r.end)) {
     const completedRecords = records.filter(r => r.start && r.end);
     const totalMinutes = completedRecords.reduce((acc, r) => acc += r.minutes, 0);
-    
+
     console.log(`Total: ${minutesToDuration(totalMinutes)}`)
   }
 };
