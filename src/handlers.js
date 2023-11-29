@@ -1,3 +1,4 @@
+import chalk from 'chalk';
 import { saveData, data as timecards } from './data.js';
 import {
   CURRENT_DATE,
@@ -139,21 +140,21 @@ const showTimecardRecord = (record, index) => {
 export const showTimecard = (date = CURRENT_DATE) => {
   const records = timecards[date];
   
-  console.log(`${date}:`);
+  console.log(chalk.magenta(`${date}:`));
 
   if (!records) {
     console.log('No records');
 
     return;
   }
-
+  
   records.forEach(showTimecardRecord);
 
   if (records.some(r => r.start && r.end)) {
     const completedRecords = records.filter(r => r.start && r.end);
     const totalMinutes = completedRecords.reduce((acc, r) => acc += r.minutes, 0);
 
-    console.log(`Total: ${minutesToDuration(totalMinutes)}`)
+    console.log(chalk.yellow(`Total: ${minutesToDuration(totalMinutes)}`));
   }
 };
 
