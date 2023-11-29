@@ -1,9 +1,19 @@
 {
   "name": "cli-work-timer",
+  "version": "1.0.0",
+  "description": "CLI Work Timer is a simple tool to track time spent working",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nitskii/cli-work-timer"
+  },
+  "homepage": "https://github.com/nitskii/cli-work-timer#readme",
   "type": "module",
   "bin": {
     "work-timer": "./src/app.js"
   },
+  "main": "./src/app.js",
+  "author": "Nikita Miller",
+  "license": "MIT",
   "dependencies": {
     "chalk": "^5.3.0",
     "commander": "^11.1.0",
