@@ -149,28 +149,48 @@ export const showTimecard = (date = CURRENT_DATE) => {
 
   records.forEach(showTimecardRecord);
 
-  if (records.some(r => r.start && r.end)) {
-    const completedRecords = records.filter(r => r.start && r.end);
-    const totalMinutes = completedRecords.reduce((acc, r) => acc += r.minutes, 0);
+  const completedRecords = records.filter(r => r.start && r.end);
+  const totalMinutes = completedRecords.reduce((m, r) => m += r.minutes, 0);
 
-    console.log(`Total: ${minutesToDuration(totalMinutes)}`)
+  if (totalMinutes > 0) {
+    console.log(`Total: ${minutesToDuration(totalMinutes)}`);
   }
 };
 
 export const showCurrentWeekTimecards = () => {
+  let totalMinutes = 0;
+
   for (let [date, records] of Object.entries(timecards)) {
-    if (records.some(r => r.week === CURRENT_WEEK && r.year === CURRENT_YEAR)) {
+    const firstRecord = records[0];
+    const isCurrentWeek = firstRecord.week === CURRENT_WEEK;
+    const isCurrentYear = firstRecord.year === CURRENT_YEAR;
+
+    if (isCurrentWeek && isCurrentYear) {
       showTimecard(date);
       console.log();
+
+      totalMinutes += records.reduce((m, r) => m += r.minutes, 0);
     }
   }
+
+  console.log(`Week total: ${minutesToDuration(totalMinutes)}`);
 };
 
 export const showCurrentMonthTimecards = () => {
+  let totalMinutes = 0;
+
   for (let [date, records] of Object.entries(timecards)) {
-    if (records.some(r => r.month === CURRENT_MONTH && r.year === CURRENT_YEAR)) {
+    const firstRecord = records[0];
+    const isCurrentMonth = firstRecord.month === CURRENT_MONTH;
+    const isCurrentYear = firstRecord.year === CURRENT_YEAR;
+
+    if (isCurrentMonth && isCurrentYear) {
       showTimecard(date);
       console.log();
+
+      totalMinutes += records.reduce((m, r) => m += r.minutes, 0);
     }
   }
+
+  console.log(`Month total: ${minutesToDuration(totalMinutes)}`);
 };
