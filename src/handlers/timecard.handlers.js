@@ -13,18 +13,12 @@ import {
 } from "../lib/time.js";
 
 export const createTimeCardIfNotExists = async () => {
-  if (!Object.keys(timecards).includes(CURRENT_DATE)) {
-    timecards[CURRENT_DATE] = [{
-      start: null,
-      end: null,
-      week: CURRENT_WEEK,
-      month: CURRENT_MONTH,
-      year: CURRENT_YEAR
-    }];
+  if (!Object.hasOwn(timecards, CURRENT_DATE)) {
+    timecards[CURRENT_DATE] = [];
   }
 };
 
-export const updateStartTime = async time => {
+export const updateRecordStartTime = async time => {
   const currentRecord = timecards[CURRENT_DATE]
     .find(r => r.start === null || r.end === null);
 
@@ -58,7 +52,7 @@ export const updateStartTime = async time => {
   await saveData();
 };
 
-export const updateEndTime = async time => {
+export const updateRecordEndTime = async time => {
   const currentRecord = timecards[CURRENT_DATE]
     .find(r => r.start === null || r.end === null);
 
@@ -92,18 +86,13 @@ export const updateEndTime = async time => {
     await saveData();
 };
 
-export const createTimecardFromTimeRange = async range => {
-  const [
-    startTime,
-    endTime
-  ] = range.split('-');
-
-  const startMinutes = timeStringToMinutes(startTime);
-  const endMinutes = timeStringToMinutes(endTime);
+export const createTimecardRecord = async (start, end) => {
+  const startMinutes = timeStringToMinutes(start);
+  const endMinutes = timeStringToMinutes(end);
   
   timecards[CURRENT_DATE].push({
-    start: startTime,
-    end: endTime,
+    start: start,
+    end: end,
     week: CURRENT_WEEK,
     month: CURRENT_MONTH,
     year: CURRENT_YEAR,
@@ -166,7 +155,11 @@ export const showCurrentWeekTimecards = () => {
     }
   }
 
-  console.log(chalk.yellow(`Week total: ${minutesToDuration(totalMinutes)}`));
+  if (totalMinutes > 0) {
+    console.log(chalk.yellow(`Week total: ${minutesToDuration(totalMinutes)}`));
+  } else {
+    console.log('No completed records');
+  }
 };
 
 export const showCurrentMonthTimecards = () => {
@@ -185,5 +178,9 @@ export const showCurrentMonthTimecards = () => {
     }
   }
 
-  console.log(chalk.yellow(`Month total: ${minutesToDuration(totalMinutes)}`));
+  if (totalMinutes) {
+    console.log(chalk.yellow(`Month total: ${minutesToDuration(totalMinutes)}`));
+  } else {
+    console.log('No completed records');
+  }
 };

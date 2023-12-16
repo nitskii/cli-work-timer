@@ -1,6 +1,6 @@
 {
   "name": "cli-work-timer",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "CLI Work Timer is a simple tool to track time spent working",
   "repository": {
     "type": "git",

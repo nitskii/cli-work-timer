@@ -28,14 +28,10 @@ export const data = existsSync(DATA_FILE_NAME)
   : {};
 
 export const saveData = async () => {
+  data[CURRENT_DATE].sort(timeRangesComparator);
+
   await writeFile(
     DATA_FILE_NAME,
-    `${
-      JSON.stringify(
-        data[CURRENT_DATE].sort(timeRangesComparator),
-        null,
-        2
-      )
-    }\n`
-  );
+    `${JSON.stringify(data, null, 2)}\n`
+    );
 };

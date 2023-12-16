@@ -23,5 +23,6 @@ work-timer <command>
 - `today` - show today's timecard info
 - `week` - show current week's timecards info
 - `month` - show current month's timecards info
+- `record <start> <end>` - create new timecard record
 
 \* The supported time format is H:mm (e.g. 15:37, 8:15, ...).

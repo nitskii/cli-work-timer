@@ -9,3 +9,9 @@ export const showCheckedOutMessage = ({ processedArgs }) => {
 
   console.log(`Checked out at ${time}`);
 };
+
+export const showNewRecordMessage = ({ processedArgs }) => {
+  const [ start, end ] = processedArgs;
+
+  console.log(`Checked in at ${start} and out at ${end}`);
+};
