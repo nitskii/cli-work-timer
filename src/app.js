@@ -1,18 +1,26 @@
 #!/usr/bin/env node
 
-import { Command } from 'commander';
-import { timeArgument } from './arguments/time.argument.js';
+import {
+  Command
+} from 'commander';
+import {
+  timeArgument
+} from './arguments/time.argument.js';
+import {
+  showCheckedInMessage,
+  showCheckedOutMessage
+} from './handlers/message.handlers.js';
+import {
+  validateInputTime
+} from './handlers/time.handlers.js';
 import {
   createTimeCardIfNotExists,
-  showCheckedInMessage,
-  showCheckedOutMessage,
   showCurrentMonthTimecards,
   showCurrentWeekTimecards,
   showTimecard,
   updateEndTime,
-  updateStartTime,
-  validateInputTime
-} from './handlers.js';
+  updateStartTime
+} from './handlers/timecard.handlers.js';
 
 const program = new Command();
 

@@ -13,7 +13,7 @@ import {
 import {
   CURRENT_DATE,
   timeRangesComparator
-} from './time';
+} from './time.js';
 
 const APP_FOLDER = platform() == 'win32'
   ? `${process.env.LOCALAPPDATA}/work-timer`

@@ -1,26 +1,16 @@
-import chalk from 'chalk';
+import chalk from "chalk";
 import {
   saveData,
   data as timecards
-} from './data.js';
+} from "../lib/data.js";
 import {
   CURRENT_DATE,
   CURRENT_MONTH,
   CURRENT_WEEK,
   CURRENT_YEAR,
-  isValidTime,
   minutesToDuration,
   timeStringToMinutes
-} from './time.js';
-
-export const validateInputTime = ({ processedArgs }) => {
-  const [ time ] = processedArgs;
-
-  if (isValidTime(time)) return;
-
-  console.log('Invalid input time');
-  process.exit(0);
-};
+} from "../lib/time.js";
 
 export const createTimeCardIfNotExists = async () => {
   if (!Object.keys(timecards).includes(CURRENT_DATE)) {
@@ -68,12 +58,6 @@ export const updateStartTime = async time => {
   await saveData();
 };
 
-export const showCheckedInMessage = ({ processedArgs }) => {
-  const [ time ] = processedArgs;
-
-  console.log(`Checked in at ${time}`);
-};
-
 export const updateEndTime = async time => {
   const currentRecord = timecards[CURRENT_DATE]
     .find(r => r.start === null || r.end === null);
@@ -108,10 +92,25 @@ export const updateEndTime = async time => {
     await saveData();
 };
 
-export const showCheckedOutMessage = ({ processedArgs }) => {
-  const [ time ] = processedArgs;
+export const createTimecardFromTimeRange = async range => {
+  const [
+    startTime,
+    endTime
+  ] = range.split('-');
 
-  console.log(`Checked out at ${time}`);
+  const startMinutes = timeStringToMinutes(startTime);
+  const endMinutes = timeStringToMinutes(endTime);
+  
+  timecards[CURRENT_DATE].push({
+    start: startTime,
+    end: endTime,
+    week: CURRENT_WEEK,
+    month: CURRENT_MONTH,
+    year: CURRENT_YEAR,
+    minutes: endMinutes - startMinutes
+  });
+
+  await saveData();
 };
 
 const showTimecardRecord = (record, index) => {
@@ -187,25 +186,4 @@ export const showCurrentMonthTimecards = () => {
   }
 
   console.log(chalk.yellow(`Month total: ${minutesToDuration(totalMinutes)}`));
-};
-
-export const createTimecardFromTimeRange = async range => {
-  const [
-    startTime,
-    endTime
-  ] = range.split('-');
-
-  const startMinutes = timeStringToMinutes(startTime);
-  const endMinutes = timeStringToMinutes(endTime);
-  
-  timecards[CURRENT_DATE].push({
-    start: startTime,
-    end: endTime,
-    week: CURRENT_WEEK,
-    month: CURRENT_MONTH,
-    year: CURRENT_YEAR,
-    minutes: endMinutes - startMinutes
-  });
-
-  await saveData();
 };
