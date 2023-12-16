@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { Command } from 'commander';
-import { timeArgument } from './arguments.js';
+import { timeArgument } from './arguments/time.argument.js';
 import {
   createTimeCardIfNotExists,
   showCheckedInMessage,

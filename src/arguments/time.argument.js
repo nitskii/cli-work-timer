@@ -1,5 +1,5 @@
 import { Argument } from 'commander';
-import { getCurrentTime } from './time.js';
+import { getCurrentTime } from '../time.js';
 
 export const timeArgument = new Argument(
   '[time]',

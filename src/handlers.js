@@ -1,5 +1,8 @@
 import chalk from 'chalk';
-import { saveData, data as timecards } from './data.js';
+import {
+  saveData,
+  data as timecards
+} from './data.js';
 import {
   CURRENT_DATE,
   CURRENT_MONTH,
@@ -7,8 +10,6 @@ import {
   CURRENT_YEAR,
   isValidTime,
   minutesToDuration,
-  timeRangeToMinutes,
-  timeRangesComparator,
   timeStringToMinutes
 } from './time.js';
 
@@ -49,13 +50,10 @@ export const updateStartTime = async time => {
       if (endMinutes <= startMinutes) {
         console.log('Invalid time range');
 
-        process.exis(0);
+        process.exit(0);
       }
 
-      currentRecord.minutes = timeRangeToMinutes(
-        currentRecord.start,
-        currentRecord.end
-      );
+      currentRecord.minutes = endMinutes - startMinutes;
     }
   } else {
     timecards[CURRENT_DATE].push({
@@ -67,7 +65,6 @@ export const updateStartTime = async time => {
     });
   }
   
-  timecards[CURRENT_DATE].sort(timeRangesComparator);
   await saveData();
 };
 
@@ -96,10 +93,7 @@ export const updateEndTime = async time => {
           process.exit(0);
         }
 
-        currentRecord.minutes = timeRangeToMinutes(
-          currentRecord.start,
-          currentRecord.end
-        );
+        currentRecord.minutes = endMinutes - startMinutes;
       }
     } else {
       timecards[CURRENT_DATE].push({
@@ -111,7 +105,6 @@ export const updateEndTime = async time => {
       });
     }
     
-    timecards[CURRENT_DATE].sort(timeRangesComparator);
     await saveData();
 };
 
@@ -194,4 +187,25 @@ export const showCurrentMonthTimecards = () => {
   }
 
   console.log(chalk.yellow(`Month total: ${minutesToDuration(totalMinutes)}`));
+};
+
+export const createTimecardFromTimeRange = async range => {
+  const [
+    startTime,
+    endTime
+  ] = range.split('-');
+
+  const startMinutes = timeStringToMinutes(startTime);
+  const endMinutes = timeStringToMinutes(endTime);
+  
+  timecards[CURRENT_DATE].push({
+    start: startTime,
+    end: endTime,
+    week: CURRENT_WEEK,
+    month: CURRENT_MONTH,
+    year: CURRENT_YEAR,
+    minutes: endMinutes - startMinutes
+  });
+
+  await saveData();
 };

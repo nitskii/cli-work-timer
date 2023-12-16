@@ -35,20 +35,6 @@ export const timeStringToMinutes = timeString => {
   return minutes += hours * 60;
 };
 
-export const timeRangeToMinutes = (start, end) => {
-  let [ startHours, startMinutes ] = start
-    .split(':')
-    .map(v => +v);
-  startMinutes += startHours * 60;
-
-  let [ endHours, endMinutes ] = end
-    .split(':')
-    .map(v => +v);
-  endMinutes += endHours * 60;
-
-  return Math.abs(endMinutes - startMinutes);
-};
-
 export const timeRangesComparator = (left, right) => {
   if (left.start && left.end && right.start && right.end) {
     const leftStartMinutes = timeStringToMinutes(left.start);
