@@ -131,8 +131,7 @@ export const showTimecard = (date = CURRENT_DATE) => {
   
   records.forEach(showTimecardRecord);
 
-  const completedRecords = records.filter(r => r.start && r.end);
-  const totalMinutes = completedRecords.reduce((m, r) => m += r.minutes, 0);
+  const totalMinutes = records.reduce((m, r) => m += r.minutes ?? 0, 0);
 
   if (totalMinutes > 0) {
     console.log(chalk.yellow(`Total: ${minutesToDuration(totalMinutes)}`));
@@ -151,12 +150,12 @@ export const showCurrentWeekTimecards = () => {
       showTimecard(date);
       console.log();
 
-      totalMinutes += records.reduce((m, r) => m += r.minutes, 0);
+      totalMinutes += records.reduce((m, r) => m += r.minutes ?? 0, 0);
     }
   }
 
   if (totalMinutes > 0) {
-    console.log(chalk.yellow(`Week total: ${minutesToDuration(totalMinutes)}`));
+    console.log(chalk.cyan(`Week total: ${minutesToDuration(totalMinutes)}`));
   } else {
     console.log('No completed records');
   }
@@ -174,12 +173,12 @@ export const showCurrentMonthTimecards = () => {
       showTimecard(date);
       console.log();
 
-      totalMinutes += records.reduce((m, r) => m += r.minutes, 0);
+      totalMinutes += records.reduce((m, r) => m += r.minutes ?? 0, 0);
     }
   }
 
   if (totalMinutes) {
-    console.log(chalk.yellow(`Month total: ${minutesToDuration(totalMinutes)}`));
+    console.log(chalk.cyan(`Month total: ${minutesToDuration(totalMinutes)}`));
   } else {
     console.log('No completed records');
   }
